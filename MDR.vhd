@@ -11,8 +11,13 @@ module MDR #(parameter N=32)(
     output reg [N-1:0] Q
 );
 
-// Combinational Mux Logic
-assign InputD = Read ? MDataIn : BusMuxOut;
+// Mux Logic
+always @(BusMuxOut, MDataIn, Read)
+begin
+
+		InputD = Read ? MDataIn : BusMuxOut;
+ 
+end
 
 // Register Update
 always @(posedge clk)
@@ -26,4 +31,4 @@ end
 
 // Output Q can go to BusMuxIn-MDR, or to memory chip.
 
-endmodule   
+endmodule  
