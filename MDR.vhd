@@ -4,9 +4,9 @@
 module MDR #(parameter N=32)(
     input wire [N-1:0] BusMuxOut, MDataIn,
     input wire Read,
-	 input wire clk,          // Synchronous clock input
+    input wire clk,          // Synchronous clock input
     input wire MDRin,        // Control signal to enable MDR update 
-	 input wire Clear,        // Clear signal 
+    input wire Clear,        // Clear signal 
     output reg [N-1:0] InputD,
     output reg [N-1:0] Q
 );
