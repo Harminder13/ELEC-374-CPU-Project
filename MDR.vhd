@@ -1,34 +1,30 @@
 // MDR 2-1 Mux and MDR Data Register
 
 
-module MDR #(parameter N=32)(
-    input wire [N-1:0] BusMuxOut, MDataIn,
-    input wire Read,
-    input wire clk,          // Synchronous clock input
-    input wire MDRin,        // Control signal to enable MDR update 
-    input wire Clear,        // Clear signal 
-    output reg [N-1:0] InputD,
-    output reg [N-1:0] Q
+module MDR(
+	input wire clk,			// Synchronous clock input
+	input wire Clear,			// Clear signal 
+	 
+	input wire[31:0] BusMuxOut, 
+	input wire[31:0] MDataIn,
+	input wire MDRead,
+	input wire MDRIn,        // Control signal to enable MDR update 
+	
+	output reg[31:0] InputD,
+	output reg[31:0] Q
 );
 
 // Mux Logic
-always @(BusMuxOut, MDataIn, Read)
-begin
-
-		InputD = Read ? MDataIn : BusMuxOut;
- 
+always @(BusMuxOut, MDataIn, MDRead) begin
+	InputD = MDRead ? MDataIn : BusMuxOut;
 end
 
 // Register Update
-always @(posedge clk)
-begin 
-		if (Clear)
-			Q <= {N{1'B0}}; //Clear Q to all zeros 
-		else if (MDRin)
-			Q <= InputD;
+always @(posedge clk) begin 
+	if (Clear)
+		Q <= 31'b0; 	//Clear Q to all zeros 
+	else if (MDRIn)
+		Q <= InputD;
 end
-
-
-// Output Q can go to BusMuxIn-MDR, or to memory chip.
 
 endmodule  
