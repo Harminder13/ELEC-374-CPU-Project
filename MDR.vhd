@@ -18,7 +18,7 @@ assign InputD = Read ? MDataIn : BusMuxOut;
 always @(posedge clk)
 begin 
 		if (Clear)
-			Q <= {n{1'B0}}; //Clear Q to all zeros 
+			Q <= {N{1'B0}}; //Clear Q to all zeros 
 		else if (MDRin)
 			Q <= InputD;
 end
