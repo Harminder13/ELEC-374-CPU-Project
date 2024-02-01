@@ -8,7 +8,7 @@ module restoringDivider (
     output reg [31:0] remainder
 );
 
-    // We can assigne thease register to 4 of the R0 to R15 registers 
+    // We can assign thease register to 4 of the R0 to R15 registers 
     reg [31:0] A;
     reg [31:0] M;
     reg [31:0] Q;
