@@ -76,3 +76,64 @@ module SeqMultiplier (input wire [31:0] M, Q, output wire [63: 0] result);
 		result = {acc, Q};
 	end
 endmodule
+
+
+
+module LogicalRightShift (input wire [31:0] unshifted, output wire [31:0] shifted);
+
+	initial begin
+		integer i;
+		for (i = 0; i < 31; i = i + 1) begin
+			shifted [i] = unshifted [i + 1];
+		end
+		shifted [31] = 0;
+	end
+endmodule
+
+
+module ArithmeticRightShift (input wire [31:0] unshifted, output wire [31:0] shifted);
+
+	initial begin
+		integer i;
+		for (i = 0; i < 31; i = i + 1) begin
+			shifted [i] = unshifted [i + 1];
+		end
+		shifted [31] = unshifted [31];
+	end
+endmodule
+
+
+module LeftShift (input wire [31:0] unshifted, output wire [31:0] shifted);
+
+	initial begin
+		integer i;
+		for (i = 1; i < 32; i = i + 1) begin
+			shifted [i] = unshifted [i - 1];
+		end
+		shifted [0] = 0;
+	end
+endmodule
+
+
+module RotateRight (input wire [31:0] unrotated, output wire [31:0] rotated);
+
+	initial begin
+		integer i;
+		for (i = 0; i < 31; i = i + 1) begin
+			rotated [i] = unrotated [i + 1];
+		end
+		rotated [31] = unrotated [0];
+	end
+endmodule
+
+
+module RotateLeft (input wire [31:0] unrotated, output wire [31:0] rotated);
+	
+	initial begin
+		integer i;
+		for (i = 1; i < 32; i = i + 1) begin
+			rotated [i] = unrotated [i - 1];
+		end;
+		rotated [0] = unrotated [31];
+	end
+endmodule
