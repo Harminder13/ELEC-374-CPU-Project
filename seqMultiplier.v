@@ -10,7 +10,6 @@ module seqMultiplier (
     reg [31:0] Q;
     reg [31:0] M;
     reg C;
-    reg [31:0] temp;
     integer i;
 
     always @(posedge clk or negedge rst_n) begin
