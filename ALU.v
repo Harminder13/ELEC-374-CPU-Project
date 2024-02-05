@@ -1,28 +1,56 @@
-module And (input wire [31:0] A, B, output reg [31: 0] result);
+module alu2 (
+	input wire[31:0] A,
+	input wire[31:0] B,
+	input wire[31:0] Op,
+	output reg[31:0] alu_out);
+	
+always @(Op) begin
+	case (Op)
+		4'b0000: alu_out = A+B;
+		4'b0001: alu_out = A-B;
+		4'b0010: alu_out = A/B;
+		4'b0011: alu_out = A*B;
+		4'b0100: alu_out = A & B;
+		4'b0101: alu_out = A | B;
+		4'b0110: alu_out = A << 1;
+		4'b0111: alu_out = A >> 1;
+		4'b1000: alu_out = {A[30:0],A[31]};
+		4'b1001: alu_out = {A[0],A[31:0]};
+		4'b1010: alu_out = A | B;
 
-	initial begin
+		default alu_out = 1'bz;
+	endcase
+end
+
+function [31:0] And (input wire [31:0] A, B);
+
+	begin
 		integer i;
+		reg[31:0] result;
 		for (i = 0; i < 32; i = i + 1) begin
 			assign result [i] = A [i] & B [i];
 		end
+		assign And = result;
 	end
-endmodule
+endfunction
 
 
-module Or (input wire [31:0] A, B, output reg [31: 0] result);
+function [31:0] Or (input wire [31:0] A, B);
 
-	initial begin
+	begin
 		integer i;
+		reg[31:0] result;
 		for (i = 0; i < 32; i = i + 1) begin
 			result [i] = A [i] | B [i];
 		end
+		assign Or = result;
 	end
-endmodule
+endfunction
 
 
-module CLA (input wire [31:0] A, B, output wire [32: 0] result, output wire carry_out);
+function [31:0] CLA (input wire [31:0] A, B);
 
-	initial begin
+	begin
 		reg [32:0] C;
 		reg [31:0] G, P, sum;
 	
@@ -34,106 +62,98 @@ module CLA (input wire [31:0] A, B, output wire [32: 0] result, output wire carr
 			C[i + 1] = G[i] | (P[i] & C[i]);
 			sum[i] = A[i] ^ B[i] ^ C[i];
 		end
-	
-		result = sum;
-		carry_out = C[32];
+		assign CLA = sum;
 	end
 
-endmodule
+endfunction
 
+function [31:0] LogicalRightShift (input wire [31:0] unshifted);
 
-module SeqMultiplier (input wire [31:0] M, Q, output wire [63: 0] result);
-
-	CLA adder (
-				.A(M),
-				.B(acc),
-				.result (tmp),
-				.carry_out (carry)
-				);
-	
-	initial begin
-		reg [31:0] acc;
-		reg [31:0] tmp;
-		reg carry;
-		integer i;
-		for (i = 0; i < 32; i = i + 1) begin
-			acc[i] = 0;
-		end
-		
-		for (i = 0; i < 32; i = i + 1) begin
-			if (Q[0] == 1) begin
-				/* 32 bit adder to add M with A, store 32 bit sum in A,
-					store carry out in reg carry*/
-			end
-			Q = Q >> 1;
-			if (M[0] == 1)
-				Q[31] = 1;
-			acc = acc >> 1;
-			if (carry == 1)
-				S[31] = 1;
-			carry = carry >> 1;
-		end
-		result = {acc, Q};
-	end
-endmodule
-
-
-
-module LogicalRightShift (input wire [31:0] unshifted, output wire [31:0] shifted);
-
-	initial begin
+	begin
+		reg[31:0] shifted;
 		integer i;
 		for (i = 0; i < 31; i = i + 1) begin
 			shifted [i] = unshifted [i + 1];
 		end
 		shifted [31] = 0;
+		assign LogicalRightShift = shifted;
 	end
-endmodule
+endfunction
 
 
-module ArithmeticRightShift (input wire [31:0] unshifted, output wire [31:0] shifted);
+function [31:0] ArithmeticRightShift (input wire [31:0] unshifted);
 
-	initial begin
+	begin
+		reg[31:0] shifted;
 		integer i;
 		for (i = 0; i < 31; i = i + 1) begin
 			shifted [i] = unshifted [i + 1];
 		end
 		shifted [31] = unshifted [31];
+		assign ArithmeticRightShift = shifted;
 	end
-endmodule
+endfunction
 
 
-module LeftShift (input wire [31:0] unshifted, output wire [31:0] shifted);
+function [31:0] LeftShift (input wire [31:0] unshifted);
 
-	initial begin
+	begin
+		reg[31:0] shifted;
 		integer i;
 		for (i = 1; i < 32; i = i + 1) begin
 			shifted [i] = unshifted [i - 1];
 		end
 		shifted [0] = 0;
+		assign LeftShift = shifted;
 	end
-endmodule
+endfunction
 
 
-module RotateRight (input wire [31:0] unrotated, output wire [31:0] rotated);
+function [31:0] RotateRight (input wire [31:0] unrotated);
 
-	initial begin
+	begin
+	reg[31:0] rotated;
 		integer i;
 		for (i = 0; i < 31; i = i + 1) begin
 			rotated [i] = unrotated [i + 1];
 		end
 		rotated [31] = unrotated [0];
+		assign RotateRight = rotated;
 	end
-endmodule
+endfunction
 
 
-module RotateLeft (input wire [31:0] unrotated, output wire [31:0] rotated);
+function [31:0] RotateLeft (input wire [31:0] unrotated);
 	
-	initial begin
+	begin
+	reg[31:0] rotated;
 		integer i;
 		for (i = 1; i < 32; i = i + 1) begin
 			rotated [i] = unrotated [i - 1];
 		end;
 		rotated [0] = unrotated [31];
+		assign RotateLeft = rotated;
 	end
+endfunction
+
+endmodule
+
+
+
+
+//TestBench
+module TB();
+reg [31:0]A,B;
+reg [3:0] Op;
+wire [31:0] alu_out;
+
+alu2 a1(A,B,Op,alu_out);
+
+initial
+begin
+    Op = 4'b0000; A=12; B=6;
+    #10;
+
+    end
+
 endmodule
