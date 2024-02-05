@@ -391,6 +391,13 @@ MDR TheMDR(
 	.Q(BusMuxOut)
 );
 
+ALU TheALU(
+	.A(BusMuxOut),
+	.B(BusMuxOut),
+	.Op(ALUcontrol),
+	.alu_out(BusMuxOut)
+);
+
 
 always @(posedge clk) begin
 
