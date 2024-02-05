@@ -27,19 +27,18 @@ module seqMultiplier (
             for (i = 0; i < 32; i = i + 1) begin
                 if (Q[0] == 1) begin
                     {A, C} = M + Q;
-                end
-                {C, A, Q} = {C, A, Q} >> 1;
+                    {C, A, Q} = {C, A, Q} >> 1;
             end
             else begin
                 {C, A, Q} = {C, A, Q} >> 1;
                 {A, C} = M + Q;
             end
-        end
-    end
-
     // Assign the product output
     if (i < 32) begin
         product <= {A, Q};
     end
+        end
+    end
+
 
 endmodule
