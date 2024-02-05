@@ -1,4 +1,4 @@
-module alu2 (
+module ALU (
 	input wire[31:0] A,
 	input wire[31:0] B,
 	input wire[31:0] Op,
@@ -143,17 +143,22 @@ endmodule
 
 //TestBench
 module TB();
-reg [31:0]A,B;
-reg [3:0] Op;
-wire [31:0] alu_out;
+reg[31:0] A;
+reg[31:0] B;
+reg[3:0] Op;
+wire[31:0] alu_out;
 
-alu2 a1(A,B,Op,alu_out);
+ALU a1(
+	.A(A), 
+	.B(B), 
+	.Op(Op), 
+	.alu_out(alu_out)
+);
 
-initial
-begin
+initial begin
     Op = 4'b0000; A=12; B=6;
     #10;
-
+	 
     end
 
 endmodule
