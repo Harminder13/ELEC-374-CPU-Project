@@ -38,7 +38,7 @@ module seqMultiplier (
     end
 
     // Assign the product output
-    if (i<32) begin
+    if (i < 32) begin
         product <= {A, Q};
     end
 
