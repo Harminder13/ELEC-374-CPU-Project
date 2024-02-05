@@ -38,7 +38,7 @@ module seqMultiplier (
     end
 
     // Assign the product output
-    always_comb begin
+    if (i<32) begin
         product <= {A, Q};
     end
 
