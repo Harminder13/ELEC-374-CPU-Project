@@ -26,14 +26,13 @@ module booth_multiplier(
     always @(posedge clk or negedge reset) begin
         if (!reset) begin
             product_reg <= 0;
-            recoded_multiplier <= 0;
         end
         else begin
             // Sign extend multiplicand to match the width of product_reg
             extended_multiplicand = {{32{multiplicand[31]}}, multiplicand};
 
             // Add or subtract sign-extended multiplicand based on recoded multiplier
-            case (recoded_multiplier[i])
+            case (recoded_multiplier)
                 1: product_reg <= product_reg + extended_multiplicand; // Addition
                -1: product_reg <= product_reg - extended_multiplicand; // Subtraction
                 default: product_reg <= product_reg; // No adjustment
