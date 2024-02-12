@@ -9,11 +9,12 @@ module booth_multiplier(
     reg signed [63:0] product_reg;
     reg signed [31:0] recoded_multiplier;
     integer i;
+    reg signed [63:0] extended_multiplicand;
 
     always @(*) begin
         // Booth multiplier recoding table
         for (i = 0; i < 32; i = i + 1) begin
-            case ({multiplier[i], multiplier[i-1]})
+            case ({multiplier[i], (i == 0) ? multiplier[0] : multiplier[i-1]})
                 2'b11: recoded_multiplier[i] = 0;   // no adjustment
                 2'b10: recoded_multiplier[i] = 1;   // +1 adjustment
                 2'b01: recoded_multiplier[i] = -1;  // -1 adjustment
@@ -29,7 +30,7 @@ module booth_multiplier(
         end
         else begin
             // Sign extend multiplicand to match the width of product_reg
-            signed [63:0] extended_multiplicand = {{32{multiplicand[31]}}, multiplicand};
+            extended_multiplicand = {{32{multiplicand[31]}}, multiplicand};
 
             // Add or subtract sign-extended multiplicand based on recoded multiplier
             case (recoded_multiplier[i])
