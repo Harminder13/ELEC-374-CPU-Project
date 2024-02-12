@@ -22,24 +22,25 @@ always @(Op) begin
 	endcase
 end
 
-function [31:0] And (input wire [31:0] A, B);
-
-	begin
-		integer i;
+function [31:0] And (input [31:0] A, B);
+      integer i;
 		reg[31:0] result;
+	begin
+		
 		for (i = 0; i < 32; i = i + 1) begin
-			assign result [i] = A [i] & B [i];
+			 result [i] = A [i] & B [i];
 		end
 		assign And = result;
 	end
 endfunction
 
 
-function [31:0] Or (input wire [31:0] A, B);
-
+function [31:0] Or (input [31:0] A, B);
+	
+	integer i;
+	reg[31:0] result;
+	
 	begin
-		integer i;
-		reg[31:0] result;
 		for (i = 0; i < 32; i = i + 1) begin
 			result [i] = A [i] | B [i];
 		end
@@ -48,14 +49,15 @@ function [31:0] Or (input wire [31:0] A, B);
 endfunction
 
 
-function [31:0] CLA (input wire [31:0] A, B);
-
-	begin
-		reg [32:0] C;
-		reg [31:0] G, P, sum;
+function [31:0] CLA (input [31:0] A, B);
 	
-		integer i;
-		assign C[0] = 0;
+	reg [32:0] C;
+	reg [31:0] G, P, sum;
+	integer i;
+	
+	begin
+		
+		 C[0] = 0;
 		for (i = 0; i < 32; i = i + 1) begin
 			G[i] = A[i] & B[i];
 			P[i] = A[i] | B[i];
@@ -67,11 +69,11 @@ function [31:0] CLA (input wire [31:0] A, B);
 
 endfunction
 
-function [31:0] LogicalRightShift (input wire [31:0] unshifted);
-
+function [31:0] LogicalRightShift (input [31:0] unshifted);
+	
+	reg[31:0] shifted;
+	integer i;
 	begin
-		reg[31:0] shifted;
-		integer i;
 		for (i = 0; i < 31; i = i + 1) begin
 			shifted [i] = unshifted [i + 1];
 		end
@@ -81,11 +83,12 @@ function [31:0] LogicalRightShift (input wire [31:0] unshifted);
 endfunction
 
 
-function [31:0] ArithmeticRightShift (input wire [31:0] unshifted);
-
+function [31:0] ArithmeticRightShift (input [31:0] unshifted);
+	
+	reg[31:0] shifted;
+	integer i;
+	
 	begin
-		reg[31:0] shifted;
-		integer i;
 		for (i = 0; i < 31; i = i + 1) begin
 			shifted [i] = unshifted [i + 1];
 		end
@@ -95,11 +98,11 @@ function [31:0] ArithmeticRightShift (input wire [31:0] unshifted);
 endfunction
 
 
-function [31:0] LeftShift (input wire [31:0] unshifted);
+function [31:0] LeftShift (input [31:0] unshifted);
 
+   reg[31:0] shifted;
+	integer i;
 	begin
-		reg[31:0] shifted;
-		integer i;
 		for (i = 1; i < 32; i = i + 1) begin
 			shifted [i] = unshifted [i - 1];
 		end
@@ -109,11 +112,12 @@ function [31:0] LeftShift (input wire [31:0] unshifted);
 endfunction
 
 
-function [31:0] RotateRight (input wire [31:0] unrotated);
-
-	begin
+function [31:0] RotateRight (input [31:0] unrotated);
+	integer i;
 	reg[31:0] rotated;
-		integer i;
+	
+	begin
+		
 		for (i = 0; i < 31; i = i + 1) begin
 			rotated [i] = unrotated [i + 1];
 		end
@@ -123,14 +127,16 @@ function [31:0] RotateRight (input wire [31:0] unrotated);
 endfunction
 
 
-function [31:0] RotateLeft (input wire [31:0] unrotated);
+function [31:0] RotateLeft (input [31:0] unrotated);
+	
+	reg[31:0] rotated;
+	integer i;
 	
 	begin
-	reg[31:0] rotated;
-		integer i;
+	
 		for (i = 1; i < 32; i = i + 1) begin
 			rotated [i] = unrotated [i - 1];
-		end;
+		end
 		rotated [0] = unrotated [31];
 		assign RotateLeft = rotated;
 	end
