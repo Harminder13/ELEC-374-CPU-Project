@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module datapath_tb;
+module tb_datapath;
 	reg clk;
 	reg reset;
 	
