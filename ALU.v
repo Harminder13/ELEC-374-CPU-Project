@@ -2,21 +2,22 @@ module ALU (
 	input wire[31:0] A,
 	input wire[31:0] B,
 	input wire[31:0] Op,
-	output reg[31:0] alu_out);
+	output reg[31:0] alu_out,
+	output reg[31:0] alu_out2);
 	
 always @(Op) begin
 	case (Op)
-		4'b0000: alu_out = A+B;
-		4'b0001: alu_out = A-B;
+		4'b0000: alu_out = CLA (A, B);
+		4'b0001: alu_out = subtract (A, B);
 		4'b0010: alu_out = A/B;
 		4'b0011: alu_out = A*B;
-		4'b0100: alu_out = A & B;
-		4'b0101: alu_out = A | B;
-		4'b0110: alu_out = A << 1;
-		4'b0111: alu_out = A >> 1;
-		4'b1000: alu_out = {A[30:0],A[31]};
-		4'b1001: alu_out = {A[0],A[31:0]};
-		4'b1010: alu_out = A | B;
+		4'b0100: alu_out = And (A. B);
+		4'b0101: alu_out = Or (A, B);
+		4'b0110: alu_out = LogicalRightShift (A);
+		4'b0111: alu_out = ArithmeticRightShift (A);
+		4'b1000: alu_out = LeftShift (A);
+		4'b1001: alu_out = RotateRight (A);
+		4'b1010: alu_out = RotateLeft (A);
 
 		default alu_out = 1'bz;
 	endcase
@@ -170,26 +171,3 @@ endfunction
 endmodule
 
 
-
-
-//TestBench
-module TB();
-reg[31:0] A;
-reg[31:0] B;
-reg[3:0] Op;
-wire[31:0] alu_out;
-
-ALU a1(
-	.A(A), 
-	.B(B), 
-	.Op(Op), 
-	.alu_out(alu_out)
-);
-
-initial begin
-    Op = 4'b0000; A=12; B=6;
-    #10;
-	 
-    end
-
-endmodule
