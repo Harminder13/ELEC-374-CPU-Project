@@ -169,7 +169,7 @@ function [31:0] RotateLeft (input [31:0] unrotated);
 endfunction
 
 // Multiplicant= A , Multiplier= B
-function [31:0] Mul (input [31:0] A, B);
+function [63:0] Mul (input [31:0] A, B);
 
 	reg signed [63:0] product_reg;         
 	reg signed [31:0] recoded_multiplier;  
