@@ -3,14 +3,14 @@ module ALU (
 	input wire[31:0] B,
 	input wire[31:0] Op,
 	output reg[31:0] alu_out,
-	output reg[31:0] alu_out2);
+	output reg[63:0] alu_out2);
 	
 always @(Op) begin
 	case (Op)
 		4'b0000: alu_out = CLA (A, B);
 		4'b0001: alu_out = subtract (A, B);
 		4'b0010: alu_out = A/B;
-		4'b0011: alu_out = Mul (A,B);
+		4'b0011: alu_out2 = Mul(A,B);
 		4'b0100: alu_out = And (A, B);
 		4'b0101: alu_out = Or (A, B);
 		4'b0110: alu_out = LogicalRightShift (A);
@@ -198,11 +198,8 @@ function [31:0] Mul (input [31:0] A, B);
 		product_reg <= product_reg >>> 1;
 		counter <= counter + 1;
 	end
-	 
-	assign Upper = product_reg[63:32];   
-	assign Lower = product_reg[31:0];   
 	counter <= 0; 
-        
+	assign results = product_reg[63:0];     
 	end
 	endmodule
 
