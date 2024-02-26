@@ -69,6 +69,31 @@ function [31:0] CLA (input [31:0] A, B);
 
 endfunction
 
+function [31:0] subtract (input [31:0] A, B);
+
+	B = ~B + 1;
+	reg [32:0] C;
+	reg [31:0] G, P, diff;
+	integer i;
+	
+	begin
+		
+		C[0] = 0;
+		for (i = 0; i < 32; i = i + 1) begin
+			G[i] = A[i] & B[i];
+			P[i] = A[i] | B[i];
+			C[i + 1] = G[i] | (P[i] & C[i]);
+			diff[i] = A[i] ^ B[i] ^ C[i];
+		end
+		
+		if (C [32] == 0)
+			diff = ~diff + 1;
+			
+		assign subtract = diff;
+	end
+
+endfunction
+
 function [31:0] LogicalRightShift (input [31:0] unshifted);
 	
 	reg[31:0] shifted;
