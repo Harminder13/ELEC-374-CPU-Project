@@ -9,7 +9,7 @@ always @(Op) begin
 	case (Op)
 		4'b0000: alu_out = CLA (A, B);
 		4'b0001: alu_out = subtract (A, B);
-		4'b0010: alu_out = A/B;
+		4'b0010: alu_out2 = Div (A,B);
 		4'b0011: alu_out2 = Mul(A,B);
 		4'b0100: alu_out = And (A, B);
 		4'b0101: alu_out = Or (A, B);
@@ -204,32 +204,51 @@ function [63:0] Mul (input [31:0] A, B);
 endfunction
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// dividend= A , divisor= B
+function [63:0] Div (input [31:0] A, B);
+	reg [31:0] C;
+	reg [31:0] M =B;
+	reg [31:0] Q =A;
+	reg [5:0] counter;
 	
+	integer counter=32;
+	
+	while (counter > 0) begin
+		// Shift left {C, Q}, (This value will be updated immediately)
+		{C, Q} = {C, Q} << 1; 
+		// C = C - M, (This value will be updated immediately)
+		C = C - M;             
+            
+		// Check sign bit of C
+		if (C[31] == 0) begin    
+			// Set least significant bit (LSB) of Q as 0
+			Q[0] = 1'b0;
+		end 
+			
+		else begin
+			// Set LSB of Q as 1, and restore C
+			Q[0] = 1'b1;
+			// (This value will be updated immediately)
+			C = C + M;
+		end
+			
+		/ Decrement count
+		counter = counter - 1;
+	end
+	// Result is in Q, and remainder is in C
+	quotient = Q;
+	remainder = C; 
+			
+	C = 32'b0;
+	Q = dividend;
+	M = divisor;
+	n = 5'b1;  
+	quotient = 32'b0;
+	remainder = 32'b0;
+			
+	assign Div= {quotient[63:32], remainder[31:0]}
+			
+endfunction 
 endmodule
 
 
