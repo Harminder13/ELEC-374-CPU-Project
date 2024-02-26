@@ -201,7 +201,7 @@ function [63:0] Mul (input [31:0] A, B);
 	counter <= 0; 
 	assign results = product_reg[63:0];     
 	end
-	endmodule
+endfunction
 
 
 
