@@ -10,8 +10,8 @@ always @(Op) begin
 		4'b0000: alu_out = CLA (A, B);
 		4'b0001: alu_out = subtract (A, B);
 		4'b0010: alu_out = A/B;
-		4'b0011: alu_out = A*B;
-		4'b0100: alu_out = And (A. B);
+		4'b0011: alu_out = Mul (A,B);
+		4'b0100: alu_out = And (A, B);
 		4'b0101: alu_out = Or (A, B);
 		4'b0110: alu_out = LogicalRightShift (A);
 		4'b0111: alu_out = ArithmeticRightShift (A);
@@ -168,6 +168,71 @@ function [31:0] RotateLeft (input [31:0] unrotated);
 	end
 endfunction
 
+// Multiplicant= A , Multiplier= B
+function [31:0] Mul (input [31:0] A, B);
+
+	reg signed [63:0] product_reg;         
+	reg signed [31:0] recoded_multiplier;  
+	reg [5:0] counter; 
+	reg signed [63:0] extended_multiplicand;
+	extended_multiplicand = {{32{A[31]}}, A};
+	
+	integer prdouct_reg <=0;
+	integer counter<=0;
+	
+	while (counter<32) begin 
+	
+		case ({B[counter], (counter == 0) ? B[0] : B[counter-1]})
+			2'b11: recoded_multiplier[counter] <= 0;   // no adjustment
+			2'b10: recoded_multiplier[counter] <= 1;   // +1 adjustment
+			2'b01: recoded_multiplier[counter] <= -1;  // -1 adjustment
+			2'b00: recoded_multiplier[counter] <= 0;   // no adjustment
+		endcase
+
+		case (recoded_multiplier[counter])
+			1: product_reg <= product_reg + extended_multiplicand; // Addition
+			-1: product_reg <= product_reg - extended_multiplicand; // Subtraction
+			default: ; // No adjustment
+		endcase
+	
+		product_reg <= product_reg >>> 1;
+		counter <= counter + 1;
+	end
+	 
+	assign Upper = product_reg[63:32];   
+	assign Lower = product_reg[31:0];   
+	counter <= 0; 
+        
+	end
+	endmodule
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
 endmodule
 
 
